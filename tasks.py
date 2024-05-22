@@ -2,18 +2,34 @@ from textwrap import dedent
 from crewai import Task
 
 class AnalysisPreparationTasks():
+    def project_initiation_task(self, agent, product_description, price):
+        return Task(
+            description=dedent(f"""
+            Initiate the analysis project by reviewing the project scope and customer
+            requirements. Develop a project plan that includes timelines, analysis
+            requirements, and task assignments.
+
+            Product Description: {product_description}
+            Price: {price}"""),
+            expected_output=dedent("""
+            A comprehensive project plan that outlines the project timeline, analysis
+            requirements, and task assignments for each team member."""),
+            async_execution=True,
+            agent=agent
+        )
+    
     def product_analysis_task(self, agent, product_description):
-    return Task(
-        description=dedent(f"""
-        Analyze the provided product information and provide insights on the product's condition, market trends, and price fairness.
-        Product Description: {product_description}
-        """),
-        expected_output=dedent("""
-        A detailed report containing product analysis insights, including the product's condition, market trends, and an assessment of the price fairness.
-        """),
-        async_execution=True,
-        agent=agent
-    )
+        return Task(
+            description=dedent(f"""
+            Analyze the provided product information and provide insights on the product's condition, market trends, and price fairness.
+            Product Description: {product_description}
+            """),
+            expected_output=dedent("""
+            A detailed report containing product analysis insights, including the product's condition, market trends, and an assessment of the price fairness.
+            """),
+            async_execution=True,
+            agent=agent
+        )
 
     def review_analysis_task(self, agent, product_description):
         return Task(

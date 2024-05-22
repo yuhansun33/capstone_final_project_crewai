@@ -17,15 +17,15 @@ price = input("Please provide the price of the product:\n")
 
 # Create Agents
 program_manager_agent = agents.program_manager_agent()
-data_analyst_agent = agents.data_analyst_agent()
-comment_analyst_agent = agents.comment_analyst_agent()
-risk_manager_agent = agents.risk_manager_agent()
+product_analyst_agent = agents.product_analyst_agent()
+review_analyst_agent = agents.review_analyst_agent()
+fraud_detection_agent = agents.fraud_detection_agent()
 
 # Create Tasks
 project_initiation = tasks.project_initiation_task(program_manager_agent, product_description, price)
-product_analysis = tasks.product_analysis_task(data_analyst_agent, product_description)
-review_analysis = tasks.review_analysis_task(comment_analyst_agent, product_description)
-fraud_assessment = tasks.fraud_assessment_task(risk_manager_agent, product_description, price)
+product_analysis = tasks.product_analysis_task(product_analyst_agent, product_description)
+review_analysis = tasks.review_analysis_task(review_analyst_agent, product_description)
+fraud_assessment = tasks.fraud_assessment_task(fraud_detection_agent, product_description, price)
 final_report = tasks.final_report_task(program_manager_agent, product_description, price)
 
 fraud_assessment.context = [product_analysis, review_analysis]
@@ -35,16 +35,16 @@ final_report.context = [product_analysis, review_analysis, fraud_assessment]
 crew = Crew(
     agents=[
         program_manager_agent,
-        data_analyst_agent,
-        comment_analyst_agent,
-        risk_manager_agent
+        product_analyst_agent,
+        review_analyst_agent,
+        fraud_detection_agent
     ],
     tasks=[
         project_initiation,
-        product_data_analysis,
-        customer_feedback_analysis,
-        risk_assessment,
-        final_analysis_report
+        product_analysis,
+        review_analysis,
+        fraud_assessment,
+        final_report
     ],
     process = Process.sequential
 )

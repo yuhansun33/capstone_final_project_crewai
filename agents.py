@@ -14,7 +14,7 @@ class AnalysisPreparationAgents():
             verbose=True
         )
 
-    def data_analyst_agent(self):
+    def product_analyst_agent(self):
         return Agent(
         role='Product Analyst',
         goal='Analyze product information and provide market insights',
@@ -24,7 +24,7 @@ class AnalysisPreparationAgents():
         verbose=True
         )
 
-    def comment_analyst_agent(self):
+    def review_analyst_agent(self):
         return Agent(
         role='Review Analyst',
         goal='Analyze customer reviews and expert opinions to assess product quality',
@@ -34,7 +34,7 @@ class AnalysisPreparationAgents():
         verbose=True
         )
 
-    def risk_manager_agent(self):
+    def fraud_detection_agent(self):
         return Agent(
         role='Fraud Detection Specialist',
         goal='Assess potential fraud risks associated with the purchasing channel',
