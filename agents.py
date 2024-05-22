@@ -16,36 +16,30 @@ class AnalysisPreparationAgents():
 
     def data_analyst_agent(self):
         return Agent(
-            role='Data Analyst',
-            goal='Collect and analyze product data to provide valuable insights',
-            backstory=dedent("""
-            As a Data Analyst, your mission is to gather and analyze product data from
-            various sources. Your insights will help identify trends, patterns, and
-            opportunities for improvement, which will contribute to the overall success
-            of the project."""),
-            verbose=True
+        role='Product Analyst',
+        goal='Analyze product information and provide market insights',
+        backstory=dedent("""
+        As a Product Analyst, your role is to gather and analyze product information from various sources. Your insights will help determine the fairness of the price and identify any potential concerns based on the product's condition and market trends.
+        """),
+        verbose=True
         )
 
     def comment_analyst_agent(self):
         return Agent(
-            role='Comment Analyst',
-            goal='Analyze customer feedback and expert opinions to gain valuable insights',
-            backstory=dedent("""
-            As a Comment Analyst, your role is to collect and analyze customer reviews,
-            feedback, and expert opinions related to the project. Your findings will
-            provide a deeper understanding of customer sentiment and help identify areas
-            for improvement."""),
-            verbose=True
+        role='Review Analyst',
+        goal='Analyze customer reviews and expert opinions to assess product quality',
+        backstory=dedent("""
+        As a Review Analyst, your role is to collect and analyze customer reviews and expert opinions related to the product. Your findings will provide insights into the product's quality, performance, and overall customer satisfaction.
+        """),
+        verbose=True
         )
 
     def risk_manager_agent(self):
         return Agent(
-            role='Risk Manager',
-            goal='Assess potential risks and recommend mitigation strategies',
-            backstory=dedent("""
-            As a Risk Manager, your responsibility is to identify and assess potential
-            risks associated with the project based on the data and comment analysis.
-            You will provide a comprehensive risk evaluation report and suggest strategies
-            to mitigate these risks."""),
-            verbose=True
+        role='Fraud Detection Specialist',
+        goal='Assess potential fraud risks associated with the purchasing channel',
+        backstory=dedent("""
+        As a Fraud Detection Specialist, your responsibility is to identify and assess potential fraud risks associated with the purchasing channel based on the product information and price. You will provide a comprehensive fraud risk assessment and suggest measures to mitigate these risks.
+        """),
+        verbose=True
         )

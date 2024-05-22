@@ -1,5 +1,6 @@
-model_name = "llama3:70b"
-custom_model_name = "crewai-llama3:70b"
+# Varibles
+model_name="llama3:70b"
+custom_model_name="crewai-llama3:70b"
 
 # ollama pull $model_name
 

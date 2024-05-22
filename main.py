@@ -12,8 +12,8 @@ agents = AnalysisPreparationAgents()
 print("## Welcome to the Analysis Prep Crew")
 print('-------------------------------')
 
-project_scope = input("What is the scope of the project?\n")
-customer_requirements = input("What are the customer's requirements?\n")
+product_description = input("Please provide the product description (name, purchasing channel, condition, etc.):\n")
+price = input("Please provide the price of the product:\n")
 
 # Create Agents
 program_manager_agent = agents.program_manager_agent()
@@ -22,14 +22,14 @@ comment_analyst_agent = agents.comment_analyst_agent()
 risk_manager_agent = agents.risk_manager_agent()
 
 # Create Tasks
-project_initiation = tasks.project_initiation_task(program_manager_agent, project_scope, customer_requirements)
-product_data_analysis = tasks.product_data_analysis_task(data_analyst_agent, project_scope)
-customer_feedback_analysis = tasks.customer_feedback_analysis_task(comment_analyst_agent, project_scope)
-risk_assessment = tasks.risk_assessment_task(risk_manager_agent, project_scope)
-final_analysis_report = tasks.final_analysis_report_task(program_manager_agent, project_scope, customer_requirements)
+project_initiation = tasks.project_initiation_task(program_manager_agent, product_description, price)
+product_analysis = tasks.product_analysis_task(data_analyst_agent, product_description)
+review_analysis = tasks.review_analysis_task(comment_analyst_agent, product_description)
+fraud_assessment = tasks.fraud_assessment_task(risk_manager_agent, product_description, price)
+final_report = tasks.final_report_task(program_manager_agent, product_description, price)
 
-risk_assessment.context = [product_data_analysis, customer_feedback_analysis]
-final_analysis_report.context = [product_data_analysis, customer_feedback_analysis, risk_assessment]
+fraud_assessment.context = [product_analysis, review_analysis]
+final_report.context = [product_analysis, review_analysis, fraud_assessment]
 
 # Create Crew responsible for Analysis
 crew = Crew(
@@ -45,7 +45,7 @@ crew = Crew(
         customer_feedback_analysis,
         risk_assessment,
         final_analysis_report
-    ]
+    ],
     process = Process.sequential
 )
 

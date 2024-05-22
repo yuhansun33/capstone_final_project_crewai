@@ -2,80 +2,54 @@ from textwrap import dedent
 from crewai import Task
 
 class AnalysisPreparationTasks():
-    def project_initiation_task(self, agent, project_scope, customer_requirements):
+    def product_analysis_task(self, agent, product_description):
+    return Task(
+        description=dedent(f"""
+        Analyze the provided product information and provide insights on the product's condition, market trends, and price fairness.
+        Product Description: {product_description}
+        """),
+        expected_output=dedent("""
+        A detailed report containing product analysis insights, including the product's condition, market trends, and an assessment of the price fairness.
+        """),
+        async_execution=True,
+        agent=agent
+    )
+
+    def review_analysis_task(self, agent, product_description):
         return Task(
             description=dedent(f"""
-            Initiate the analysis project by reviewing the project scope and customer
-            requirements. Develop a project plan that includes timelines, analysis
-            requirements, and task assignments.
-
-            Project Scope: {project_scope}
-            Customer Requirements: {customer_requirements}"""),
+            Collect and analyze customer reviews and expert opinions related to the product. Provide insights into the product's quality, performance, and overall customer satisfaction.
+            Product Description: {product_description}
+            """),
             expected_output=dedent("""
-            A comprehensive project plan that outlines the project timeline, analysis
-            requirements, and task assignments for each team member."""),
+            A report summarizing the insights derived from the analysis of customer reviews and expert opinions, focusing on product quality, performance, and customer satisfaction.
+            """),
             async_execution=True,
             agent=agent
         )
 
-    def product_data_analysis_task(self, agent, project_scope):
+    def fraud_assessment_task(self, agent, product_description, price):
         return Task(
             description=dedent(f"""
-            Collect and analyze product data from various sources within the scope of
-            the project. Provide structured and processed product data insights that
-            will contribute to the overall analysis.
-
-            Project Scope: {project_scope}"""),
+            Assess potential fraud risks associated with the purchasing channel based on the product information and price. Provide a fraud risk assessment and recommend mitigation measures.
+            Product Description: {product_description}
+            Price: {price}
+            """),
             expected_output=dedent("""
-            A detailed report containing structured and processed product data insights
-            that can be used for further analysis and decision-making."""),
-            async_execution=True,
+            A comprehensive fraud risk assessment that identifies potential fraud risks associated with the purchasing channel and provides recommendations for risk mitigation.
+            """),
             agent=agent
         )
 
-    def customer_feedback_analysis_task(self, agent, project_scope):
+    def final_report_task(self, agent, product_description, price):
         return Task(
             description=dedent(f"""
-            Collect and analyze customer reviews, feedback, and expert opinions related
-            to the project scope. Provide insights and recommendations based on the
-            analysis of customer sentiment and feedback.
-
-            Project Scope: {project_scope}"""),
+            Review and consolidate the findings from the product analysis, review analysis, and fraud assessment. Prepare a final report that provides an overall assessment of the product, its price fairness, and any potential risks or concerns.
+            Product Description: {product_description}
+            Price: {price}
+            """),
             expected_output=dedent("""
-            A report summarizing the insights and recommendations derived from the
-            analysis of customer feedback and expert opinions."""),
-            async_execution=True,
-            agent=agent
-        )
-
-    def risk_assessment_task(self, agent, project_scope):
-        return Task(
-            description=dedent(f"""
-            Assess potential risks and fraudulent activities based on the product data
-            and customer feedback analysis within the project scope. Provide a risk
-            evaluation report highlighting areas of concern and recommend mitigation
-            strategies.
-
-            Project Scope: {project_scope}"""),
-            expected_output=dedent("""
-            A comprehensive risk evaluation report that identifies potential risks,
-            highlights areas of concern, and provides recommendations for risk
-            mitigation."""),
-            agent=agent
-        )
-
-    def final_analysis_report_task(self, agent, project_scope, customer_requirements):
-        return Task(
-            description=dedent(f"""
-            Review and consolidate the findings from the product data analysis, customer
-            feedback analysis, and risk assessment. Prepare a final analysis report that
-            meets the project scope and customer requirements.
-
-            Project Scope: {project_scope}
-            Customer Requirements: {customer_requirements}"""),
-            expected_output=dedent("""
-            A comprehensive final analysis report that includes product evaluations,
-            pricing insights, risk assessments, and recommendations based on the
-            consolidated findings."""),
+            A comprehensive final report that includes product analysis, review insights, fraud risk assessment, and an overall recommendation regarding the product and its price.
+            """),
             agent=agent
         )
