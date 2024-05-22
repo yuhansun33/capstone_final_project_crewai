@@ -46,6 +46,7 @@ crew = Crew(
         fraud_assessment,
         final_report
     ],
+    verbose=True,
     process = Process.sequential
 )
 
