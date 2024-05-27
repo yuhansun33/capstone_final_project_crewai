@@ -1,8 +1,9 @@
 from textwrap import dedent
 from crewai import Task
+from chroma import ChromaVectorDatabase
 
 class HomeworkCorrectionTasks():
-    def project_initiation_task(self, agent, student_answer, ChromaVectorDatabase):
+    def project_initiation_task(self, agent, student_answer):
         return Task(
             description=dedent(f"""
             Initiate the homework correction project by reviewing the project scope and student requirements. Develop a project plan that includes timelines, analysis requirements, and task assignments.
@@ -17,7 +18,7 @@ class HomeworkCorrectionTasks():
             tools=[ChromaVectorDatabase.query_chroma]
         )
 
-    def textbook_analysis_task(self, agent, student_answer, ChromaVectorDatabase):
+    def textbook_analysis_task(self, agent, student_answer):
         return Task(
             description=dedent(f"""
             Analyze the textbook content and identify the chapters related to the student's incorrect answers.
@@ -46,7 +47,7 @@ class HomeworkCorrectionTasks():
             agent=agent
         )
 
-    def error_book_creation_task(self, agent, student_answer, ChromaVectorDatabase):
+    def error_book_creation_task(self, agent, student_answer):
         return Task(
             description=dedent(f"""
             Based on the student's misconceptions, search for relevant college entrance exam questions and compile them into an error book. Output the error book as a .md file.
@@ -60,7 +61,7 @@ class HomeworkCorrectionTasks():
             tools=[ChromaVectorDatabase.query_chroma]
         )
 
-    def final_report_task(self, agent, student_answer, ChromaVectorDatabase):
+    def final_report_task(self, agent, student_answer):
         return Task(
             description=dedent(f"""
             Review and consolidate the results from the textbook analysis, homework grading, and error book creation. Prepare a final report that provides an overall assessment of the student's homework, identifies misconceptions, and includes the error book.

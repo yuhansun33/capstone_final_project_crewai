@@ -11,3 +11,4 @@ html2text
 langserve[all]
 playwright
 beautifulsoup4
+langchain_chroma

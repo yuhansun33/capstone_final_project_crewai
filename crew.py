@@ -5,7 +5,6 @@ from crewai import Crew, Process
 from tasks import HomeworkCorrectionTasks
 from agents import HomeworkCorrectionAgents
 from state import graphState
-from chroma import ChromaVectorDatabase
 
 class CrewHomeworkCorrection():
     def __init__(self):
@@ -27,11 +26,11 @@ class CrewHomeworkCorrection():
         self.error_book_creator_agent = agents.error_book_creator_agent()
 
         # Create Tasks
-        self.project_initiation = tasks.project_initiation_task(self.program_manager_agent, student_answer, education_resources)
-        self.textbook_analysis = tasks.textbook_analysis_task(self.textbook_analyst_agent, student_answer, education_resources)
+        self.project_initiation = tasks.project_initiation_task(self.program_manager_agent, student_answer)
+        self.textbook_analysis = tasks.textbook_analysis_task(self.textbook_analyst_agent, student_answer)
         self.homework_grading = tasks.homework_grading_task(self.homework_grader_agent, student_answer)
-        self.error_book_creation = tasks.error_book_creation_task(self.error_book_creator_agent, student_answer, education_resources)
-        self.final_report = tasks.final_report_task(self.program_manager_agent, student_answer, education_resources)
+        self.error_book_creation = tasks.error_book_creation_task(self.error_book_creator_agent, student_answer)
+        self.final_report = tasks.final_report_task(self.program_manager_agent, student_answer)
 
         self.error_book_creation.context = [self.textbook_analysis, self.homework_grading]
         self.final_report.context = [self.textbook_analysis, self.homework_grading, self.error_book_creation]
@@ -65,7 +64,7 @@ class CrewHomeworkCorrection():
         print(result)
         return result
 
-# if __name__ == "__main__":
-#     crew_homework_correction = CrewHomeworkCorrection()
-#     state = graphState()
-#     crew_homework_correction.run(state)
+if __name__ == "__main__":
+    crew_homework_correction = CrewHomeworkCorrection()
+    state = graphState()
+    crew_homework_correction.run(state)

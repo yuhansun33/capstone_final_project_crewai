@@ -1,5 +1,6 @@
 from textwrap import dedent
 from crewai import Agent
+from chroma import ChromaVectorDatabase
 
 class HomeworkCorrectionAgents():
     def program_manager_agent(self):
@@ -12,6 +13,7 @@ class HomeworkCorrectionAgents():
             teams, ensure smooth communication, and make sure the project meets the student's 
             expectations and requirements.
             """),
+            tools=[ChromaVectorDatabase.query_chroma],
             verbose=True
         )
 
@@ -24,6 +26,7 @@ class HomeworkCorrectionAgents():
             school textbooks. Your analysis will help determine which chapters the student's 
             incorrect answers belong to.
             """),
+            tools=[ChromaVectorDatabase.query_chroma],
             verbose=True
         )
 
@@ -41,11 +44,12 @@ class HomeworkCorrectionAgents():
     def error_book_creator_agent(self):
         return Agent(
             role='Error Book Creator',
-            goal='Search for relevant college entrance exam questions based on the student's misconceptions and create an error book',
+            goal="Search for relevant college entrance exam questions based on the student's misconceptions and create an error book",
             backstory=dedent("""
             As an Error Book Creator, your role is to search for relevant college entrance 
             exam questions based on the student's misconceptions and compile them into an 
             error book. The error book will be output as a .md file.
             """),
+            tools=[ChromaVectorDatabase.query_chroma],
             verbose=True
         )
