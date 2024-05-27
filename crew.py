@@ -8,9 +8,9 @@ from state import graphState
 
 class CrewHomeworkCorrection():
     def __init__(self):
-        print("## Welcome to the Homework Correction Crew")
+        print("## 歡迎來到 AI 大講堂 ##")
         print('-------------------------------')
-        student_answer = input("Please enter the student's answer: \n")
+        student_answer = input("輸入你要問的問題與答案： \n")
         # textbook_info = input("Please enter the high school textbook information: \n")
         # exam_questions = input("Please enter the college entrance exam questions: \n")
 
