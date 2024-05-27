@@ -8,9 +8,9 @@ from state import graphState
 
 class CrewHomeworkCorrection():
     def __init__(self):
-        print("## 歡迎來到 AI 大講堂 ##")
+        print("\n## 歡迎來到 AI 大講堂 ##")
         print('-------------------------------')
-        student_answer = input("輸入你要問的問題與答案： \n")
+        student_answer = self.get_multiline_input("輸入你要問的問題與答案： \n")
         # textbook_info = input("Please enter the high school textbook information: \n")
         # exam_questions = input("Please enter the college entrance exam questions: \n")
 
@@ -34,7 +34,17 @@ class CrewHomeworkCorrection():
 
         self.error_book_creation.context = [self.textbook_analysis, self.homework_grading]
         self.final_report.context = [self.textbook_analysis, self.homework_grading, self.error_book_creation]
-
+    def get_multiline_input(self, prompt):
+        print(prompt)
+        lines = []
+        while True:
+            line = input()
+            if line:
+                lines.append(line)
+            else:
+                break
+        return '\n'.join(lines)
+    
     def run(self, state):
         # Create Crew responsible for Homework Correction
         crew = Crew(
