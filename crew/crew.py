@@ -1,55 +1,55 @@
 from dotenv import load_dotenv
-
 load_dotenv()
 
 from crewai import Crew, Process
-from tasks import AnalysisPreparationTasks
-from agents import AnalysisPreparationAgents
+from tasks import HomeworkCorrectionTasks
+from agents import HomeworkCorrectionAgents
 from state import graphState
+# from education_resources import EducationResources
 
-
-class CrewAnalysis():
+class CrewHomeworkCorrection():
     def __init__(self):
-        print("## Welcome to the Analysis Prep Crew")
+        print("## Welcome to the Homework Correction Crew")
         print('-------------------------------')
+        student_answer = input("Please enter the student's answer: \n")
+        # textbook_info = input("Please enter the high school textbook information: \n")
+        # exam_questions = input("Please enter the college entrance exam questions: \n")
 
-        product_description = input("Please provide the product description (name, purchasing channel, condition, etc.):\n")
-        price = input("Please provide the price of the product:\n")
+        # education_resources = EducationResources(textbook_info, exam_questions)
 
-        tasks = AnalysisPreparationTasks()
-        agents = AnalysisPreparationAgents()
+        tasks = HomeworkCorrectionTasks()
+        agents = HomeworkCorrectionAgents()
 
         # Create Agents
         self.program_manager_agent = agents.program_manager_agent()
-        self.product_analyst_agent = agents.product_analyst_agent()
-        self.review_analyst_agent = agents.review_analyst_agent()
-        self.fraud_detection_agent = agents.fraud_detection_agent()
+        self.textbook_analyst_agent = agents.textbook_analyst_agent()
+        self.homework_grader_agent = agents.homework_grader_agent()
+        self.error_book_creator_agent = agents.error_book_creator_agent()
 
         # Create Tasks
-        self.project_initiation = tasks.project_initiation_task(self.program_manager_agent, product_description, price)
-        self.product_analysis = tasks.product_analysis_task(self.product_analyst_agent, product_description)
-        self.review_analysis = tasks.review_analysis_task(self.review_analyst_agent, product_description)
-        self.fraud_assessment = tasks.fraud_assessment_task(self.fraud_detection_agent, product_description, price)
-        self.final_report = tasks.final_report_task(self.program_manager_agent, product_description, price)
+        self.project_initiation = tasks.project_initiation_task(self.program_manager_agent, student_answer, education_resources)
+        self.textbook_analysis = tasks.textbook_analysis_task(self.textbook_analyst_agent, student_answer, education_resources)
+        self.homework_grading = tasks.homework_grading_task(self.homework_grader_agent, student_answer)
+        self.error_book_creation = tasks.error_book_creation_task(self.error_book_creator_agent, student_answer, education_resources)
+        self.final_report = tasks.final_report_task(self.program_manager_agent, student_answer, education_resources)
 
-        self.fraud_assessment.context = [self.product_analysis, self.review_analysis]
-        self.final_report.context = [self.product_analysis, self.review_analysis, self.fraud_assessment]
+        self.error_book_creation.context = [self.textbook_analysis, self.homework_grading]
+        self.final_report.context = [self.textbook_analysis, self.homework_grading, self.error_book_creation]
 
     def run(self, state):
-
-        # Create Crew responsible for Analysis
+        # Create Crew responsible for Homework Correction
         crew = Crew(
             agents=[
                 self.program_manager_agent,
-                self.product_analyst_agent,
-                self.review_analyst_agent,
-                self.fraud_detection_agent
+                self.textbook_analyst_agent,
+                self.homework_grader_agent,
+                self.error_book_creator_agent
             ],
             tasks=[
                 self.project_initiation,
-                self.product_analysis,
-                self.review_analysis,
-                self.fraud_assessment,
+                self.textbook_analysis,
+                self.homework_grading,
+                self.error_book_creation,
                 self.final_report
             ],
             verbose=True,
@@ -63,11 +63,9 @@ class CrewAnalysis():
         print("## Here is the result")
         print("################################################\n")
         print(result)
-
         return result
 
-
 # if __name__ == "__main__":
-#     crew_analysis = CrewAnalysis()
+#     crew_homework_correction = CrewHomeworkCorrection()
 #     state = graphState()
-#     crew_analysis.run(state)
+#     crew_homework_correction.run(state)
