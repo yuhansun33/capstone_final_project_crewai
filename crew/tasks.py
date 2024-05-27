@@ -2,7 +2,7 @@ from textwrap import dedent
 from crewai import Task
 
 class HomeworkCorrectionTasks():
-    def project_initiation_task(self, agent, student_answer, education_resources):
+    def project_initiation_task(self, agent, student_answer, ChromaVectorDatabase):
         return Task(
             description=dedent(f"""
             Initiate the homework correction project by reviewing the project scope and student requirements. Develop a project plan that includes timelines, analysis requirements, and task assignments.
@@ -14,10 +14,10 @@ class HomeworkCorrectionTasks():
             """),
             async_execution=True,
             agent=agent,
-            tools=[education_resources.query_chroma]
+            tools=[ChromaVectorDatabase.query_chroma]
         )
 
-    def textbook_analysis_task(self, agent, student_answer, education_resources):
+    def textbook_analysis_task(self, agent, student_answer, ChromaVectorDatabase):
         return Task(
             description=dedent(f"""
             Analyze the textbook content and identify the chapters related to the student's incorrect answers.
@@ -29,7 +29,7 @@ class HomeworkCorrectionTasks():
             """),
             async_execution=True,
             agent=agent,
-            tools=[education_resources.query_chroma]
+            tools=[ChromaVectorDatabase.query_chroma]
         )
 
     def homework_grading_task(self, agent, student_answer):
@@ -46,7 +46,7 @@ class HomeworkCorrectionTasks():
             agent=agent
         )
 
-    def error_book_creation_task(self, agent, student_answer, education_resources):
+    def error_book_creation_task(self, agent, student_answer, ChromaVectorDatabase):
         return Task(
             description=dedent(f"""
             Based on the student's misconceptions, search for relevant college entrance exam questions and compile them into an error book. Output the error book as a .md file.
@@ -57,10 +57,10 @@ class HomeworkCorrectionTasks():
             entrance exam questions based on the student's misconceptions.
             """),
             agent=agent,
-            tools=[education_resources.query_chroma]
+            tools=[ChromaVectorDatabase.query_chroma]
         )
 
-    def final_report_task(self, agent, student_answer, education_resources):
+    def final_report_task(self, agent, student_answer, ChromaVectorDatabase):
         return Task(
             description=dedent(f"""
             Review and consolidate the results from the textbook analysis, homework grading, and error book creation. Prepare a final report that provides an overall assessment of the student's homework, identifies misconceptions, and includes the error book.
@@ -72,5 +72,5 @@ class HomeworkCorrectionTasks():
             homework.
             """),
             agent=agent,
-            tools=[education_resources.query_chroma]
+            tools=[ChromaVectorDatabase.query_chroma]
         )
