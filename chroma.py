@@ -14,7 +14,7 @@ class ChromaVectorDatabase:
         )
 
     @tool("query_chroma")
-    def query_chroma(self, query_text: str, number_of_most_similar_results: int = 5):
+    def query_chroma(query_text: str, number_of_most_similar_results: int = 5):
         """Query the Chroma vector database for similar documents based on the given query text.
         Args:
         query_text (str): The text to use as a query for similarity search.
@@ -23,7 +23,7 @@ class ChromaVectorDatabase:
         Returns:
         str: The concatenated content of the most similar documents, separated by "\\n\\n---\\n\\n".
         """
-        results = self.vector_database.similarity_search_with_score(query_text, k=number_of_most_similar_results)
+        results = ChromaVectorDatabase().vector_database.similarity_search_with_score(query_text, k=number_of_most_similar_results)
         context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in results])
         return context_text
 
