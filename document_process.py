@@ -2,21 +2,25 @@ from langchain_community.document_loaders import PyPDFDirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.schema.document import Document
 
-def load_documents(DATA_PATH: str):
-    document_loader = PyPDFDirectoryLoader(DATA_PATH)
-    return document_loader.load()
+class DocumentProcessor:
+    def __init__(self, data_path: str, chunk_size: int = 1000, chunk_overlap: int = 100):
+        self.data_path = data_path
+        self.chunk_size = chunk_size
+        self.chunk_overlap = chunk_overlap
 
-def spilt_documents(documents: list[Document]):
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=100,
-        length_function=len,
-    )
-    return splitter.split_documents(documents)
+    def load_documents(self):
+        document_loader = PyPDFDirectoryLoader(self.data_path)
+        return document_loader.load()
 
-if __name__ == "__main__":
-    documents = load_documents("data")
-    # print(len(documents))
-    splitted_documents = spilt_documents(documents)
-    # print(splitted_documents)
-    
+    def split_documents(self, documents: list[Document]):
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size=self.chunk_size,
+            chunk_overlap=self.chunk_overlap,
+            length_function=len,
+        )
+        return splitter.split_documents(documents)
+
+    def process_documents(self):
+        documents = self.load_documents()
+        splitted_documents = self.split_documents(documents)
+        return splitted_documents
