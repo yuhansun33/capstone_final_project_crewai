@@ -69,7 +69,7 @@ def clean_vector_database() -> None:
     
 if __name__ == "__main__":
     from document_process import DocumentProcessor
-    data_path = "data"
+    data_path = "data/exam_data"
     processor = DocumentProcessor(data_path)
     processed_documents = processor.process_documents()
     chroma_add_chunks(processed_documents)  
