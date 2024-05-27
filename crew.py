@@ -62,6 +62,12 @@ class CrewHomeworkCorrection():
         print("## Here is the result")
         print("################################################\n")
         print(result)
+
+        # write the result to a markdown file
+        output_file = "TeacherOutput.md"
+        with open(output_file, "w") as file:
+            file.write(result)
+        
         return result
 
 if __name__ == "__main__":
