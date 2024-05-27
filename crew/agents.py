@@ -1,45 +1,51 @@
 from textwrap import dedent
 from crewai import Agent
 
-class AnalysisPreparationAgents():
+class HomeworkCorrectionAgents():
     def program_manager_agent(self):
         return Agent(
             role='Program Manager',
-            goal='Coordinate the analysis project and ensure customer satisfaction',
+            goal='Coordinate the homework correction project and ensure student satisfaction',
             backstory=dedent("""
-            As a Program Manager, your role is to oversee the entire analysis project,
-            from initiation to the final report. You will coordinate with various teams,
-            ensure smooth communication, and make sure the project meets the customer's
-            expectations and requirements."""),
+            As a Program Manager, your role is to oversee the entire homework correction 
+            project, from initiation to the final report. You will coordinate with various 
+            teams, ensure smooth communication, and make sure the project meets the student's 
+            expectations and requirements.
+            """),
             verbose=True
         )
 
-    def product_analyst_agent(self):
+    def textbook_analyst_agent(self):
         return Agent(
-        role='Product Analyst',
-        goal='Analyze product information and provide market insights',
-        backstory=dedent("""
-        As a Product Analyst, your role is to gather and analyze product information from various sources. Your insights will help determine the fairness of the price and identify any potential concerns based on the product's condition and market trends.
-        """),
-        verbose=True
+            role='Textbook Analyst',
+            goal='Analyze high school textbook content and identify chapters related to incorrect answers',
+            backstory=dedent("""
+            As a Textbook Analyst, your role is to collect and analyze the content of high 
+            school textbooks. Your analysis will help determine which chapters the student's 
+            incorrect answers belong to.
+            """),
+            verbose=True
         )
 
-    def review_analyst_agent(self):
+    def homework_grader_agent(self):
         return Agent(
-        role='Review Analyst',
-        goal='Analyze customer reviews and expert opinions to assess product quality',
-        backstory=dedent("""
-        As a Review Analyst, your role is to collect and analyze customer reviews and expert opinions related to the product. Your findings will provide insights into the product's quality, performance, and overall customer satisfaction.
-        """),
-        verbose=True
+            role='Homework Grader',
+            goal='Grade homework and compile explanations of incorrect concepts',
+            backstory=dedent("""
+            As a Homework Grader, your role is to grade the student's homework and compile 
+            explanations of their incorrect concepts. Your results will be output as a .md file.
+            """),
+            verbose=True
         )
 
-    def fraud_detection_agent(self):
+    def error_book_creator_agent(self):
         return Agent(
-        role='Fraud Detection Specialist',
-        goal='Assess potential fraud risks associated with the purchasing channel',
-        backstory=dedent("""
-        As a Fraud Detection Specialist, your responsibility is to identify and assess potential fraud risks associated with the purchasing channel based on the product information and price. You will provide a comprehensive fraud risk assessment and suggest measures to mitigate these risks.
-        """),
-        verbose=True
+            role='Error Book Creator',
+            goal='Search for relevant college entrance exam questions based on the student's misconceptions and create an error book',
+            backstory=dedent("""
+            As an Error Book Creator, your role is to search for relevant college entrance 
+            exam questions based on the student's misconceptions and compile them into an 
+            error book. The error book will be output as a .md file.
+            """),
+            verbose=True
         )
