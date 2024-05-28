@@ -3,11 +3,10 @@ torch
 langchain
 langgraph
 openai
-duckduckgo-search
 requests
 python-dotenv
 langchain-community
-html2text
 langserve[all]
 playwright
 beautifulsoup4
+streamlit
