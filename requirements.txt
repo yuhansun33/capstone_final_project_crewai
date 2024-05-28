@@ -9,4 +9,6 @@ langchain-community
 langserve[all]
 playwright
 beautifulsoup4
+langchain_chroma
+pdfplumber
 streamlit
