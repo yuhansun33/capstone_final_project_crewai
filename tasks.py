@@ -1,6 +1,7 @@
 from textwrap import dedent
 from crewai import Task
 from chroma import query_chroma
+from outputFile import outputMD
 
 class HomeworkCorrectionTasks():
     def project_initiation_task(self, agent, student_answer):
@@ -13,7 +14,7 @@ class HomeworkCorrectionTasks():
             一份詳盡的專案計劃，概述專案、分析要求以及每個團隊成員的任務分配，並指定他們要給你對於學生有幫助的內容。
             """),
             async_execution=True,
-            agent=agent,
+            agent=agent
         )
 
     def textbook_analysis_task(self, agent, student_answer):
@@ -23,7 +24,7 @@ class HomeworkCorrectionTasks():
             學生的問題和他的答案：{student_answer}
             """),
             expected_output=dedent("""
-            一份詳細的報告，包含教科書分析結果，指出與學生錯誤答案相關的章節，必要知識點和學習重點，並回傳給導師整理訊息。
+            一份詳細的報告，包含教科書分析結果，指出與學生錯誤答案相關的章節，必要知識點和學習重點，並回傳給報告撰寫員整理訊息。
             """),
             async_execution=True,
             agent=agent,
@@ -47,11 +48,11 @@ class HomeworkCorrectionTasks():
     def error_book_creation_task(self, agent, student_answer):
         return Task(
             description=dedent(f"""
-            根據學生的錯誤概念，搜尋相關考試題目或習題，並將其彙整起來，回傳給導師整理。
+            根據學生的錯誤概念，搜尋相關考試題目或習題，並將其彙整起來，回傳給報告撰寫員整理。
             學生的問題和他的答案：{student_answer}
             """),
             expected_output=dedent("""
-            包含根據學生錯誤概念而彙整的類似題型，或是同章節題目，其中包括其他試題和習題。
+            包含根據學生錯誤概念而彙整的類似題型，或是同章節題目，其中包括其他試題和習題，要把題目與選項完整呈現。
             """),
             agent=agent,
             tools=[query_chroma]
@@ -67,5 +68,5 @@ class HomeworkCorrectionTasks():
             一份全面的最終報告，在審閱教科書分析、作業批改結果、錯題本以及對學生作業的整體建議過後，以精確並保留重要資訊的情況下，並以 .md 檔輸出。
             """),
             agent=agent,
-            tools=[query_chroma]
+            tools=[query_chroma, outputMD]
         )

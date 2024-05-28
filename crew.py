@@ -24,13 +24,14 @@ class CrewHomeworkCorrection():
         self.textbook_analyst_agent = agents.textbook_analyst_agent()
         self.homework_grader_agent = agents.homework_grader_agent()
         self.error_book_creator_agent = agents.error_book_creator_agent()
+        self.report_writer_agent = agents.report_writer_agent()
 
         # Create Tasks
         self.project_initiation = tasks.project_initiation_task(self.program_manager_agent, student_answer)
         self.textbook_analysis = tasks.textbook_analysis_task(self.textbook_analyst_agent, student_answer)
         self.homework_grading = tasks.homework_grading_task(self.homework_grader_agent, student_answer)
         self.error_book_creation = tasks.error_book_creation_task(self.error_book_creator_agent, student_answer)
-        self.final_report = tasks.final_report_task(self.program_manager_agent, student_answer)
+        self.final_report = tasks.final_report_task(self.report_writer_agent, student_answer)
 
         self.error_book_creation.context = [self.textbook_analysis, self.homework_grading]
         self.final_report.context = [self.textbook_analysis, self.homework_grading, self.error_book_creation]
@@ -52,7 +53,8 @@ class CrewHomeworkCorrection():
                 self.program_manager_agent,
                 self.textbook_analyst_agent,
                 self.homework_grader_agent,
-                self.error_book_creator_agent
+                self.error_book_creator_agent,
+                self.report_writer_agent
             ],
             tasks=[
                 self.project_initiation,
@@ -74,11 +76,11 @@ class CrewHomeworkCorrection():
         print(result)
 
         # write the result to a markdown file
-        output_file = "TeacherOutput.md"
-        with open(output_file, "w") as file:
-            file.write(result)
+        # output_file = "TeacherOutput.md"
+        # with open(output_file, "w") as file:
+        #     file.write(result)
         
-        return result
+        # return result
 
 if __name__ == "__main__":
     crew_homework_correction = CrewHomeworkCorrection()
