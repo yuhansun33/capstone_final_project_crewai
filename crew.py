@@ -1,52 +1,65 @@
 from dotenv import load_dotenv
-load_dotenv()
-
 from crewai import Crew, Process
 from tasks import HomeworkCorrectionTasks
 from agents import HomeworkCorrectionAgents
-from state import graphState
+import streamlit as st
 
-class CrewHomeworkCorrection():
-    def __init__(self):
-        print("\n## 歡迎來到 AI 大講堂 ##")
-        print('-------------------------------')
-        student_answer = self.get_multiline_input("輸入你要問的問題與答案： \n")
-        # textbook_info = input("Please enter the high school textbook information: \n")
-        # exam_questions = input("Please enter the college entrance exam questions: \n")
+load_dotenv()
 
-        # education_resources = EducationResources(textbook_info, exam_questions)
-
+class CrewHomeworkCorrection:
+    def __init__(self, student_question, student_answer):
+        self.student_question = student_question
+        self.student_answer = student_answer
+        self.output_placeholders = st.empty()
+            
+    def run(self):
+        # Create Tasks and Agents
         tasks = HomeworkCorrectionTasks()
         agents = HomeworkCorrectionAgents()
-
+        
         # Create Agents
-        self.program_manager_agent = agents.program_manager_agent()
-        self.textbook_analyst_agent = agents.textbook_analyst_agent()
-        self.homework_grader_agent = agents.homework_grader_agent()
-        self.error_book_creator_agent = agents.error_book_creator_agent()
         self.report_writer_agent = agents.report_writer_agent()
-
+        self.program_manager_agent = agents.program_manager_agent()
+        self.homework_grader_agent = agents.homework_grader_agent()
+        self.textbook_analyst_agent = agents.textbook_analyst_agent()
+        self.error_book_creator_agent = agents.error_book_creator_agent()
+        
         # Create Tasks
-        self.project_initiation = tasks.project_initiation_task(self.program_manager_agent, student_answer)
-        self.textbook_analysis = tasks.textbook_analysis_task(self.textbook_analyst_agent, student_answer)
-        self.homework_grading = tasks.homework_grading_task(self.homework_grader_agent, student_answer)
-        self.error_book_creation = tasks.error_book_creation_task(self.error_book_creator_agent, student_answer)
-        self.final_report = tasks.final_report_task(self.report_writer_agent, student_answer)
-
-        self.error_book_creation.context = [self.textbook_analysis, self.homework_grading]
-        self.final_report.context = [self.textbook_analysis, self.homework_grading, self.error_book_creation]
-    def get_multiline_input(self, prompt):
-        print(prompt)
-        lines = []
-        while True:
-            line = input()
-            if line:
-                lines.append(line)
-            else:
-                break
-        return '\n'.join(lines)
-    
-    def run(self, state):
+        self.project_initiation = tasks.project_initiation_task(
+            self.program_manager_agent, 
+            self.student_answer, 
+            self.student_question)
+        
+        self.textbook_analysis = tasks.textbook_analysis_task(
+            self.textbook_analyst_agent, 
+            self.student_answer, 
+            self.student_question)
+        
+        self.homework_grading = tasks.homework_grading_task(
+            self.homework_grader_agent, 
+            self.student_answer, 
+            self.student_question)
+        
+        self.error_book_creation = tasks.error_book_creation_task(
+            self.error_book_creator_agent, 
+            self.student_answer, 
+            self.student_question)
+        
+        self.final_report = tasks.final_report_task(
+            self.report_writer_agent, 
+            self.student_answer, 
+            self.student_question)
+        
+        # Set Context
+        self.error_book_creation.context = [
+            self.textbook_analysis, 
+            self.homework_grading]
+        
+        self.final_report.context = [
+            self.textbook_analysis, 
+            self.homework_grading, 
+            self.error_book_creation]
+        
         # Create Crew responsible for Homework Correction
         crew = Crew(
             agents=[
@@ -68,21 +81,9 @@ class CrewHomeworkCorrection():
         )
 
         result = crew.kickoff()
-
-        # Print results
-        print("\n\n################################################")
-        print("## Here is the result")
-        print("################################################\n")
-        print(result)
-
-        # write the result to a markdown file
-        # output_file = "TeacherOutput.md"
-        # with open(output_file, "w") as file:
-        #     file.write(result)
-        
-        # return result
+        self.output_placeholders.markdown(result)
+        return result
 
 if __name__ == "__main__":
-    crew_homework_correction = CrewHomeworkCorrection()
-    state = graphState()
-    crew_homework_correction.run(state)
+    crew_homework_correction = CrewHomeworkCorrection("光的三原色是? A. 紅、綠、藍 B. 紅、黃、藍 C. 紅、綠、黃 D. 紅、綠、黑", "(A)")
+    crew_homework_correction.run()
