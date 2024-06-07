@@ -1,54 +1,43 @@
-from textwrap import dedent
+import streamlit as st 
 from crewai import Agent
+from textwrap import dedent
 from chroma import query_chroma
 from outputFile import outputMD
 from langchain_openai import ChatOpenAI
-import streamlit as st 
+from langchain_core.agents import AgentAction
 
 def streamlit_callback(step_output):
-    # This function will be called after each step of the agent's execution
     st.markdown("---")
     for step in step_output:
-        if isinstance(step, tuple) and len(step) == 2:
-            action, observation = step
-            if isinstance(action, dict) and "tool" in action and "tool_input" in action and "log" in action:
+        if len(step) == 2:
+            agent_action, context_from_agent = step
+            if isinstance(agent_action, AgentAction):
                 st.markdown(f"# Action")
-                st.markdown(f"**Tool:** {action['tool']}")
-                st.markdown(f"**Tool Input** {action['tool_input']}")
-                st.markdown(f"**Log:** {action['log']}")
-                st.markdown(f"**Action:** {action['Action']}")
-                st.markdown(
-                    f"**Action Input:** ```json\n{action['tool_input']}\n```")
-            elif isinstance(action, str):
-                st.markdown(f"**Action:** {action}")
-            else:
-                st.markdown(f"**Action:** {str(action)}")
-
-            st.markdown(f"**Observation**")
-            if isinstance(observation, str):
-                observation_lines = observation.split('\n')
-                for line in observation_lines:
-                    if line.startswith('Title: '):
-                        st.markdown(f"**Title:** {line[7:]}")
-                    elif line.startswith('Link: '):
-                        st.markdown(f"**Link:** {line[6:]}")
-                    elif line.startswith('Snippet: '):
-                        st.markdown(f"**Snippet:** {line[9:]}")
-                    elif line.startswith('-'):
-                        st.markdown(line)
-                    else:
-                        st.markdown(line)
-            else:
-                st.markdown(str(observation))
-        else:
-            st.markdown(step)
-
+                if agent_action.tool is not None:
+                    st.markdown(f"## Tool")
+                    st.markdown(f"{agent_action.tool}")
+                if agent_action.tool_input is not None:
+                    st.markdown(f"## Tool_input")
+                    st.markdown(f"{agent_action.tool_input}")
+                if agent_action.log is not None:
+                    st.markdown(f"## Log")
+                    st.markdown(f"{agent_action.log}")
+            if isinstance(context_from_agent, str):
+                st.markdown(f"# RAG Context")
+                st.markdown(f"{context_from_agent}")   
 
 class HomeworkCorrectionAgents:
-    def __init__(self):
+    def __init__(self, temperature):
+        self.temperature = temperature
         self.llm = ChatOpenAI(
-            model="gpt-4o"
+            model="gpt-4o",
+            temperature=self.temperature,
         )
+        # self.llm = ChatOpenAI(
+        #     model="crewAI-llama3",
+        #     base_url="http://localhost:11434/v1",
+        #     api_key="NA"
+        # )
     
     def program_manager_agent(self):
         return Agent(
@@ -63,6 +52,8 @@ class HomeworkCorrectionAgents:
             verbose=True,
             llm=self.llm,
             step_callback=streamlit_callback,
+            memory=True,
+            max_iter=4
         )
 
     def textbook_analyst_agent(self):
@@ -77,6 +68,8 @@ class HomeworkCorrectionAgents:
             verbose=True,
             llm=self.llm,
             step_callback=streamlit_callback,
+            memory=True,
+            max_iter=3
         )
 
     def homework_grader_agent(self):
@@ -90,6 +83,8 @@ class HomeworkCorrectionAgents:
             verbose=True,
             llm=self.llm,
             step_callback=streamlit_callback,
+            memory=True,
+            max_iter=3
         )
 
     def error_book_creator_agent(self):
@@ -101,8 +96,10 @@ class HomeworkCorrectionAgents:
             """),
             tools=[query_chroma],
             verbose=True,
+            memory=True,
             llm=self.llm,
             step_callback=streamlit_callback,
+            max_iter=3
         )
     
     def report_writer_agent(self):
@@ -110,10 +107,14 @@ class HomeworkCorrectionAgents:
             role='報告撰寫員',
             goal='根據教科書分析師、作業批改員和錯題整理者的結果，撰寫最終報告',
             backstory=dedent("""
-            作為報告撰寫員，你的職責是審查並整合教科書分析師、作業批改員和錯題整理者創建的結果。以他們的內容準備一份最終報告，提供對學生作業的總體評估，教科書章節與概念，並包含相近錯誤題型。
+            作為報告撰寫員，你的職責是審查並整合教科書分析師、作業批改員和錯題整理者創建的結果。以他們的內容準備一份由 markdown 撰寫的報告，提供對學生作業的總體評估，教科書章節與概念，並包含相近錯誤題型。
             """),
-            tools=[query_chroma, outputMD],
             verbose=True,
             llm=self.llm,
             step_callback=streamlit_callback,
+            allow_delegation=False,
+            memory=True,
+            # max_iter=4
         )
+        
+        

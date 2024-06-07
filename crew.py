@@ -7,15 +7,16 @@ import streamlit as st
 load_dotenv()
 
 class CrewHomeworkCorrection:
-    def __init__(self, student_question, student_answer):
+    def __init__(self, student_question, student_answer, temperature):
+        self.output_placeholders = st.empty()
         self.student_question = student_question
         self.student_answer = student_answer
-        self.output_placeholders = st.empty()
+        self.temperature = temperature
             
     def run(self):
         # Create Tasks and Agents
         tasks = HomeworkCorrectionTasks()
-        agents = HomeworkCorrectionAgents()
+        agents = HomeworkCorrectionAgents(self.temperature)
         
         # Create Agents
         self.report_writer_agent = agents.report_writer_agent()
@@ -52,13 +53,14 @@ class CrewHomeworkCorrection:
         
         # Set Context
         self.error_book_creation.context = [
-            self.textbook_analysis, 
-            self.homework_grading]
+            self.textbook_analysis
+        ]
         
         self.final_report.context = [
             self.textbook_analysis, 
             self.homework_grading, 
-            self.error_book_creation]
+            self.error_book_creation
+        ]
         
         # Create Crew responsible for Homework Correction
         crew = Crew(
