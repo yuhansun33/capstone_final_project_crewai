@@ -17,15 +17,19 @@ def query_chroma(query_text: str, database_directory: str, number_of_most_simila
         str: 包含最相似文件內容的字符串，每個文件之間用 "\n\n---\n\n" 分隔。
 
     """
+    database_directory = "chroma/" + database_directory
+    
     vector_database = Chroma(
         persist_directory=database_directory,
         embedding_function=get_embedding(),
     )
+    
     results = vector_database.similarity_search_with_score(
         query_text,
         k=number_of_most_similar_results
     )
+    
     context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in results])
     sources = [doc.metadata.get("id", None) for doc, _score in results]
-    context_text = f"來源: {sources}\n\n{context_text}"
+    context_text = f"###來源: {sources}\n\n{context_text}"
     return context_text

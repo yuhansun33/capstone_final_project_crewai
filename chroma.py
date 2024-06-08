@@ -47,7 +47,6 @@ def clean_vector_database():
         shutil.rmtree("chroma_db")
     print("已清空資料庫")
     
-
     
 if __name__ == "__main__":
     from document_process import DocumentProcessor
