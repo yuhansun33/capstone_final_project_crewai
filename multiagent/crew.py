@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 from crewai import Crew, Process
-from tasks import HomeworkCorrectionTasks
-from agents import HomeworkCorrectionAgents
+from multiagent.tasks import HomeworkCorrectionTasks
+from multiagent.agents import HomeworkCorrectionAgents
 import streamlit as st
 
 load_dotenv()

@@ -1,8 +1,7 @@
 import streamlit as st 
 from crewai import Agent
 from textwrap import dedent
-from chroma import query_chroma
-from outputFile import outputMD
+from .tools import query_chroma
 from langchain_openai import ChatOpenAI
 from langchain_core.agents import AgentAction
 

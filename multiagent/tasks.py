@@ -1,7 +1,6 @@
-from textwrap import dedent
+from .tools import query_chroma
 from crewai import Task
-from chroma import query_chroma
-from outputFile import outputMD
+from textwrap import dedent
 
 class HomeworkCorrectionTasks():
     def project_initiation_task(self, agent, student_answer, student_question):
