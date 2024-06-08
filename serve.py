@@ -16,11 +16,13 @@ def main():
         
     if option == "AI Question Solving System":
         
-        st.title("AI Question Solving System")
+        st.title("🦉Senior High Solving System")
         
         with st.sidebar:
             st.header("Enter your question and answer：")
             with st.form("my_form"):
+                model = st.selectbox(
+                    "Select model", ["gpt-4o", "gpt-4", "gpt-3.5-turbo", "crewAI-llama3"])
                 question = st.text_input(
                     "Enter your question：", placeholder="光的三原色是？ A. 紅、綠、藍 B. 紅、黃、藍 C. 紅、綠、黃 D. 紅、綠、黑")
                 answer = st.text_input(
@@ -33,7 +35,7 @@ def main():
         if submitted:
             with st.status("🤖 **Agents at work...**", state="running", expanded=True) as status:
                 with st.container(height=500, border=False):
-                    teachers = CrewHomeworkCorrection(question, answer, temperature)
+                    teachers = CrewHomeworkCorrection(model, question, answer, temperature)
                     result = teachers.run()
                 status.update(
                     label="✅ 已經完成解答!",

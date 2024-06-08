@@ -7,7 +7,8 @@ import streamlit as st
 load_dotenv()
 
 class CrewHomeworkCorrection:
-    def __init__(self, student_question, student_answer, temperature):
+    def __init__(self, model, student_question, student_answer, temperature):
+        self.model = model
         self.output_placeholders = st.empty()
         self.student_question = student_question
         self.student_answer = student_answer
@@ -16,7 +17,7 @@ class CrewHomeworkCorrection:
     def run(self):
         # Create Tasks and Agents
         tasks = HomeworkCorrectionTasks()
-        agents = HomeworkCorrectionAgents(self.temperature)
+        agents = HomeworkCorrectionAgents(self.temperature, self.model)
         
         # Create Agents
         self.report_writer_agent = agents.report_writer_agent()

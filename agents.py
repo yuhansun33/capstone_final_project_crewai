@@ -27,17 +27,19 @@ def streamlit_callback(step_output):
                 st.markdown(f"{context_from_agent}")   
 
 class HomeworkCorrectionAgents:
-    def __init__(self, temperature):
+    def __init__(self, temperature, model):
         self.temperature = temperature
-        self.llm = ChatOpenAI(
-            model="gpt-4o",
-            temperature=self.temperature,
-        )
-        # self.llm = ChatOpenAI(
-        #     model="crewAI-llama3",
-        #     base_url="http://localhost:11434/v1",
-        #     api_key="NA"
-        # )
+        if model != "crewAI-llama3":
+            self.llm = ChatOpenAI(
+                model=model,
+                temperature=self.temperature,
+            )
+        else:        
+            self.llm = ChatOpenAI(
+                model="crewAI-llama3",
+                base_url="http://localhost:11434/v1",
+                api_key="NA"
+            )
     
     def program_manager_agent(self):
         return Agent(
