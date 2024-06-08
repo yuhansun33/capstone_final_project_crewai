@@ -28,8 +28,9 @@ def main():
                 answer = st.text_input(
                     "Enter your answer：", placeholder="(A)")
                 temperature = st.select_slider(
-                    "Temperature", options=[0, 0.1, 0.3, 0.5, 0.7, 0.9], value=0
-                )
+                    "Temperature", options=[0, 0.1, 0.3, 0.5, 0.7, 0.9, 1.0], value=0)
+                top_k = st.slider(
+                    "Top K", min_value=1, max_value=50, value=1)
                 submitted = st.form_submit_button("Solve it!")
                 
         if submitted:

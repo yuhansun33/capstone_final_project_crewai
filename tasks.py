@@ -41,7 +41,7 @@ class HomeworkCorrectionTasks():
             學生的答案：{student_answer}
             """),
             expected_output=dedent("""
-            總結作業批改結果，重點關注學生的錯誤概念和解釋其落入怎樣的考題陷阱當中。
+            總結作業批改結果，重點關注學生的錯誤概念和解釋其落入怎樣的考題陷阱當中。並且將解題步驟完整呈現。
             """),
             agent=agent,
             tools=[query_chroma],

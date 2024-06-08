@@ -86,7 +86,7 @@ class HomeworkCorrectionAgents:
             llm=self.llm,
             step_callback=streamlit_callback,
             memory=True,
-            max_iter=3
+            max_iter=5
         )
 
     def error_book_creator_agent(self):
