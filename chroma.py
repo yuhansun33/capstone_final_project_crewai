@@ -56,5 +56,5 @@ if __name__ == "__main__":
         processor = DocumentProcessor(data_path)
         processed_documents = processor.process_documents()
         add_to_database = "chroma/chroma_" + data_element + "_data"
-        chroma_add_chunks(processed_documents, "add_to_database")
+        chroma_add_chunks(processed_documents, add_to_database)
         print(f"已添加 {data_path} 到 {add_to_database}")  
