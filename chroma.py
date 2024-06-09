@@ -52,7 +52,7 @@ if __name__ == "__main__":
     from document_process import DocumentProcessor
     data_list = ["answer", "exam", "textbook"]
     for data_element in data_list:
-        data_path = "data/" + data_element + "_data" 
+        data_path = "data/" + data_element
         processor = DocumentProcessor(data_path)
         processed_documents = processor.process_documents()
         add_to_database = "chroma/chroma_" + data_element + "_data"
