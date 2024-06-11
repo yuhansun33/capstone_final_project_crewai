@@ -75,3 +75,60 @@ class HomeworkCorrectionTasks():
             agent=agent,
             # async_execution=True,
         )
+        
+        
+        
+class CodeStudioTasks():
+    def project_initiation_task(self, agent, leetcode_question):
+        return Task(
+            description=dedent(f"""
+            透過規劃其他 agent 的工作內容以及完成需求來啟動團隊專案。制定一個包含解決此 Leetcode 問題的分析要求和任務分配的專案計劃。
+            Leetcode 問題：{leetcode_question}
+            """),
+            expected_output=dedent("""
+            一份詳盡的專案計劃，以及每個團隊成員的任務分配，並指定他們要給出對解題有幫助的回答。
+            """),
+            agent=agent,
+            # async_execution=True,
+        )
+
+    def problem_analysis_task(self, agent, leetcode_question):
+        return Task(
+            description=dedent(f"""
+            分析資料將題目敘述更容易程式設計師理解，並找出與解決問題相應的觀念。
+            Leetcode 問題：{leetcode_question}
+            """),
+            expected_output=dedent("""
+            一份詳細的報告，包含資料分析結果，修改後的問題敘述，指出與解決問題必要的知識點，回傳給程式設計師，並回傳給報告撰寫員整理訊息。
+            """),
+            agent=agent,
+            # tools=[query_chroma],
+            # async_execution=True,
+        )
+
+    def program_design_task(self, agent, leetcode_question):
+        return Task(
+            description=dedent(f"""
+            根據分析師的整理，撰寫python程式來解決問題，回傳給報告撰寫員整理，並要確保程式碼能夠正常運作，和正確回答問題。
+            Leetcode 問題：{leetcode_question}
+            """),
+            expected_output=dedent("""
+            滿足題目需求的python程式碼，並回傳給報告撰寫員整理訊息。
+            """),
+            agent=agent,
+            # tools=[query_chroma],
+            # async_execution=True,
+        )
+
+    def final_report_task(self, agent, leetcode_question):
+        return Task(
+            description=dedent(f"""
+            審查並整合問題分析師、程式設計師創建的結果。以他們的內容準備一份最終報告，提供對解題有幫助的核心觀念和參考解答。
+            Leetcode 問題：{leetcode_question}
+            """),
+            expected_output=dedent("""
+            一份全面的最終報告，在審閱問題分析、程式設計師的程式過後，提供完整註解、完整程式碼、解體步驟和想法在最終結果中。
+            """),
+            agent=agent,
+            # async_execution=True,
+        )

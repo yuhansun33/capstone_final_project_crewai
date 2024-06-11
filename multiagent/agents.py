@@ -119,3 +119,79 @@ class HomeworkCorrectionAgents:
         )
         
         
+class CodeStudioAgents:
+    def __init__(self, temperature, model):
+        self.temperature = temperature
+        if model != "crewAI-llama3":
+            self.llm = ChatOpenAI(
+                model=model,
+                temperature=self.temperature,
+            )
+        else:        
+            self.llm = ChatOpenAI(
+                model="crewAI-llama3",
+                base_url="http://localhost:11434/v1",
+                api_key="NA"
+            )
+    
+    def program_manager_agent(self):
+        return Agent(
+            role='管理員',
+            goal='協調底下的問題分析師、程式設計師，確保解答能符合要求',
+            backstory=dedent("""
+            作為管理員，你的職責是監督整個集團，從開始到最終報告。你將與各個團隊成員協調，確保順暢的溝通，並確保專案符合問題的期望和要求。
+            將問題分配交給問題分析師，請它們分析學生問題，並依照資料，整理出問題和答案相應的觀念。
+            將問題分析師產生的問題描述與解題觀念交給程式設計師，請它們根據問題描述與觀念產生正確的程式碼。
+            """),
+            verbose=True,
+            llm=self.llm,
+            step_callback=streamlit_callback,
+            memory=True,
+            max_iter=3
+        )
+
+    def problem_analyst_agent(self):
+        return Agent(
+            role='問題分析師',
+            goal='負責分析學生輸入的程式問題敘述，並深入研究問題的核心觀念和解決策略',
+            backstory=dedent("""
+            作為問題分析師，你的職責是將學生的程式問題敘述轉換為清晰的任務描述，同時深入分析問題的核心觀念和解決策略。
+            你的分析將提供給程式設計師來撰寫程式，並回傳給報告撰寫員整理訊息。
+            """),
+            # tools=[query_chroma],
+            verbose=True,
+            llm=self.llm,
+            step_callback=streamlit_callback,
+            memory=True,
+            max_iter=5
+        )
+    
+    def program_design_agent(self):
+        return Agent(
+            role='程式設計師',
+            goal='根據問題分析師提供的任務描述和核心觀念，設計和編寫程式碼，解決學生提出的程式問題',
+            backstory=dedent("""
+            作為程式設計師，你的職責是根問題分析師提供的任務描述與核心觀念，設計與撰寫程式碼，需要滿足問題指定的格式，並回傳給報告撰寫員整理訊息。
+            """),
+            # tools=[query_chroma],
+            verbose=True,
+            llm=self.llm,
+            step_callback=streamlit_callback,
+            memory=True,
+            max_iter=5
+        )
+    
+    def report_writer_agent(self):
+        return Agent(
+            role='報告撰寫員',
+            goal='根據問題分析師、程式設計師的結果，撰寫最終報告',
+            backstory=dedent("""
+            作為報告撰寫員，你的職責是審查並整合問題分析師、程式設計師創建的結果。以他們的內容準備一份最終報告，提供對解題有幫助的觀念與正確的程式碼。
+            """),
+            verbose=True,
+            llm=self.llm,
+            step_callback=streamlit_callback,
+            # allow_delegation=False,
+            memory=True,
+            max_iter=5
+        )

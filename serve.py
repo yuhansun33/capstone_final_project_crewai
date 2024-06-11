@@ -1,17 +1,16 @@
 import streamlit as st
 from openai import OpenAI
 from dotenv import load_dotenv
-from multiagent import CrewHomeworkCorrection
+from multiagent import CrewHomeworkCorrection, CrewCodeStudio
 import os
 
 load_dotenv() 
 
 def main():
-    
     with st.sidebar:
         option = st.sidebar.selectbox(
             '選擇一個區塊',
-            ('AI Question Solving System', 'GPT4o-ChatBox', 'Code Generator', 'Thesis Helper')
+            ('AI Question Solving System', 'GPT4o-ChatBox', 'Leetcode Solver', 'Thesis Helper')
         )
         
     if option == "AI Question Solving System":
@@ -71,6 +70,34 @@ def main():
             with st.chat_message("user"):
                 st.markdown(prompt)
         
+    if option == "Leetcode Solver":
+        st.title("Leetcode Solver")  
 
+        with st.sidebar:
+            st.header("Enter your question and answer:")
+            with st.form("my_form"):
+                model = st.selectbox(
+                    "Select model", ["gpt-4o", "gpt-4", "gpt-3.5-turbo", "crewAI-llama3"])
+                leetcode_question = st.text_input(
+                    "Enter your leetcode problem:", placeholder="Leetcode 1. Two Sum: https://leetcode.com/problems/two-sum/")
+                temperature = st.select_slider(
+                    "Temperature", options=[0, 0.1, 0.3, 0.5, 0.7, 0.9, 1.0], value=0)
+                # top_k = st.slider(
+                #     "Top K Similar Data", min_value=1, max_value=20, value=3)
+                submitted = st.form_submit_button("Solve it!")
+                
+        if submitted:
+            with st.status("🤖 **Agents at work...**", state="running", expanded=True) as status:
+                with st.container(height=500, border=False):
+                    studio = CrewCodeStudio(model, leetcode_question, temperature)
+                    result = studio.run()
+                status.update(
+                    label="✅ 已經完成解答!",
+                    state="complete", 
+                    expanded=False
+                )
+            st.markdown(result)
+        
+        
 if __name__ == "__main__":
     main()
